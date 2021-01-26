@@ -26,16 +26,23 @@ jobs:
       - run: bundle config set --local path 'vendor/bundle'
       - run: bundle install
 
+      # Install yarn dependencies
+      - run: 
+          name: Yarn Install
+          command: yarn install --cache-folcer ~/.cache/yarn
+
       # Cache dependencies
       - save_cache:
           name: Store bundle cache
           key: goal-tracker-{{ checksum "Gemfile.lock" }}
           paths: 
             - vendor/bundle
+            - ~/.cache/yarn
 
       - persist_to_workspace:
-          root: vendor
-          paths: bundle
+          paths: 
+            - vendor/bundle
+            - ~/.cache/yarn
 
 
   test:
@@ -58,8 +65,7 @@ jobs:
       - checkout
 
       # Use built dependencies from build job
-      - attach_workspace:
-          at: vendor
+      - attach_workspace
       - run: bundle config set --local path 'vendor/bundle'
 
       # Install Code Climate Test Reporter
@@ -101,8 +107,7 @@ jobs:
     
     executor: ruby/default
     steps:
-      - attach_workspace:
-          at: vendor
+      - attach_workspace
       - run:
           name: Install Code Climate Test Reporter
           command: |
