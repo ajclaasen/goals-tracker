@@ -2,6 +2,7 @@ version: 2.1
 orbs:
   ruby: circleci/ruby@0.1.2 
 
+
 jobs:
   build:
     docker:
@@ -26,8 +27,11 @@ jobs:
             - goal-tracker-yarn-{{ checksum "yarn.lock" }}
 
       # Install bundle dependencies
-      - run: bundle config set --local path 'vendor/bundle'
-      - run: bundle install
+      - run: 
+          name: Bundle Install in `vendor/bundle`
+          command: |
+            bundle config set --local path 'vendor/bundle'
+            bundle install
 
       # Install yarn dependencies
       - run: 
@@ -53,6 +57,7 @@ jobs:
             - yarn
 
 
+
   test:
     docker:
       - image: cimg/ruby:3.0.0-node
@@ -75,8 +80,12 @@ jobs:
       # Use built dependencies from build job
       - attach_workspace:
           at: vendor
-      - run: bundle config set --local path 'vendor/bundle'
-      - run: yarn install --cache-folder vendor/yarn
+      - run: 
+          name: Configure bundler to use `vendor/bundle`
+          command: bundle config set --local path 'vendor/bundle'
+      - run: 
+          name: Run `yarn install` with `vendor/yarn` as cache folder
+          command: yarn install --cache-folder vendor/yarn
 
       # Install Code Climate Test Reporter
       - run:
@@ -86,7 +95,9 @@ jobs:
             chmod +x ./cc-test-reporter
 
       # Set up database
-      - run: bundle exec rake db:setup
+      - run: 
+          name: Set up database
+          command: bundle exec rake db:setup
 
       # Run tests & extract results
       - run:
@@ -109,6 +120,7 @@ jobs:
           path: test-artifacts
 
 
+
   upload-coverage:
     docker:
       - image: cimg/ruby:3.0.0-node
@@ -125,8 +137,11 @@ jobs:
             curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
             chmod +x ./cc-test-reporter
       - run:
+          name: Upload coverage results
           command: |
             ./cc-test-reporter sum-coverage --output - coverage/codeclimate.*.json | ./cc-test-reporter upload-coverage --debug --input -
+
+
 
 
 workflows:
