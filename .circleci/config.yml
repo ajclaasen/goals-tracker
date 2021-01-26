@@ -11,12 +11,6 @@ jobs:
           PGHOST: 127.0.0.1
           PGUSER: root
 
-      - image: circleci/postgres:latest
-        environment:
-          POSTGRES_USER: root
-          POSTGRES_DB: goal-tracker-test
-          POSTGRES_PASSWORD: $POSTGRES_PASSWORD
-
     executor: ruby/default
     steps:
       - checkout
@@ -38,8 +32,6 @@ jobs:
           key: goal-tracker-{{ checksum "Gemfile.lock" }}
           paths: 
             - vendor/bundle
-        
-      - run: bundle exec rake db:setup
 
       - persist_to_workspace:
           root: vendor
