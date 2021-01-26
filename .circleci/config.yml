@@ -47,10 +47,10 @@ jobs:
             - ~/.cache/yarn
 
       - persist_to_workspace:
-          root: /
+          root: ~/
           paths: 
             - vendor/bundle
-            - ~/.cache/yarn
+            - .cache/yarn
 
 
   test:
@@ -74,7 +74,7 @@ jobs:
 
       # Use built dependencies from build job
       - attach_workspace:
-          at: /
+          at: ~/
       - run: bundle config set --local path 'vendor/bundle'
 
       # Install Code Climate Test Reporter
@@ -99,7 +99,7 @@ jobs:
           command: |
             ./cc-test-reporter format-coverage -t simplecov -o "coverage/codeclimate.$CIRCLE_NODE_INDEX.json"
       - persist_to_workspace:
-          root: /
+          root: ~/
           paths:
             - coverage/codeclimate.*.json
       - store_test_results:
@@ -117,7 +117,7 @@ jobs:
     executor: ruby/default
     steps:
       - attach_workspace:
-          at: /
+          at: ~/
       - run:
           name: Install Code Climate Test Reporter
           command: |
