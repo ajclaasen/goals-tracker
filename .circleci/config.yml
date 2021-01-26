@@ -8,7 +8,14 @@ jobs:
       - image: cimg/ruby:3.0.0-node
         environment:
           RAILS_ENV: test
+          PGHOST: 127.0.0.1
+          PGUSER: root
+
       - image: circleci/postgres:latest
+        environment:
+          POSTGRES_USER: root
+          POSTGRES_DB: goal-tracker-test
+
     executor: ruby/default
     steps:
       - checkout
@@ -36,7 +43,14 @@ jobs:
       - image: cimg/ruby:3.0.0-node
         environment:
           RAILS_ENV: test
+          PGHOST: 127.0.0.1
+          PGUSER: root
+
       - image: circleci/postgres:latest
+        environment:
+          POSTGRES_USER: root
+          POSTGRES_DB: goal-tracker-test
+
     executor: ruby/default
     steps:
       - run: mkdir ~/rspec
@@ -45,6 +59,7 @@ jobs:
           when: always
       - store_test_results:
           path: ~/rspec
+
 
 workflows:
   build_and_test:
