@@ -14,18 +14,18 @@ jobs:
       - checkout
 
       # Restore cached dependencies
-      - type: cache-restore
-        name: Restore bundle cache
-        key: goal-tracker-{{ checksum "Gemfile.lock" }}
+      # - type: cache-restore
+      #   name: Restore bundle cache
+      #   key: goal-tracker-{{ checksum "Gemfile.lock" }}
 
       # Install bundle dependencies
       - run: bundle install --path vendor/bundle
 
-      # Cache dependencies
-      - type: cache-save
-        name: Store bundle cache
-        key: goal-tracker-{{ checksum "Gemfile.lock" }}
-        path: vendor/bundle
+      # # Cache dependencies
+      # - type: cache-save
+      #   name: Store bundle cache
+      #   key: goal-tracker-{{ checksum "Gemfile.lock" }}
+      #   path: vendor/bundle
         
       - run: bundle exec rake db:setup
 
