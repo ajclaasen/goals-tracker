@@ -3,13 +3,16 @@ orbs:
   ruby: circleci/ruby@0.1.2 
 
 jobs:
-  build:
+  test:
     docker:
       - image: cimg/ruby:3.0.0-node
     executor: ruby/default
     steps:
       - checkout
+      - run: bundle check --path=vendor/bundle || bundle install --path=vendor/bundle --jobs=4 --retry=3
+      - run: mkdir ~/rspec
       - run:
-          name: Which bundler?
-          command: bundle -v
-      - ruby/bundle-install
+          command: bundle exec rspec --format progress --format RspecJunitFormatter -o ~/rspec/rspec.xml
+          when: always
+      - store_test_results:
+          path: ~/rspec
