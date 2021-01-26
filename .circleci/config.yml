@@ -38,6 +38,10 @@ jobs:
         
       - run: bundle exec rake db:setup
 
+      - persist_to_workspace:
+          root: vendor
+          paths: bundle
+
 
   test:
     docker:
@@ -55,6 +59,17 @@ jobs:
 
     executor: ruby/default
     steps:
+      - checkout
+
+      # Use built dependencies from build job
+      - attach_workspace:
+          at: vendor
+      - run: bundle config set --local path 'vendor/bundle'
+
+      # Set up database
+      - run: bundle exec rake db:setup
+
+      # Run tests & extract results
       - run: mkdir ~/rspec
       - run:
           command: bundle exec rspec --format progress --format RspecJunitFormatter -o ~/rspec/rspec.xml
