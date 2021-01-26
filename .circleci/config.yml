@@ -45,6 +45,7 @@ jobs:
           RAILS_ENV: test
           PGHOST: 127.0.0.1
           PGUSER: root
+          CC_TEST_REPORTER_ID: 1fbaaed8f79723cf36f267c7aa335cf81cf61b45c635456649d895a46a417028
 
       - image: circleci/postgres:latest
         environment:
@@ -61,16 +62,55 @@ jobs:
           at: vendor
       - run: bundle config set --local path 'vendor/bundle'
 
+      # Install Code Climate Test Reporter
+      - run:
+          name: Install Code Climate Test Reporter
+          command: |
+            curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./tmp/cc-test-reporter
+            chmod +x ./cc-test-reporter
+
       # Set up database
       - run: bundle exec rake db:setup
 
       # Run tests & extract results
-      - run: mkdir ~/rspec
       - run:
-          command: bundle exec rspec --format progress --format RspecJunitFormatter -o ~/rspec/rspec.xml
-          when: always
+          name: Run tests
+          command: |
+            mkdir ~/rspec
+            ./cc-test-reporter before-build
+            bundle exec rspec --format progress --format RspecJunitFormatter -o ~/rspec/rspec.xml
+      - run:
+          name: Code Climate Test Coverage
+          command: |
+            ./cc-test-reporter format-coverage -t simplecov -o "coverage/codeclimate.$CIRCLE_NODE_INDEX.json"
+      - persist_to_workspace
+          root: coverage
+          paths:
+            - codeclimate.*.json
       - store_test_results:
           path: ~/rspec
+      - store_artifacts:
+          path: test-artifacts
+
+
+  upload-coverage:
+    docker:
+      - image: cimg/ruby:3.0.0-node
+        environment:
+          CC_TEST_REPORTER_ID: 1fbaaed8f79723cf36f267c7aa335cf81cf61b45c635456649d895a46a417028
+    
+    executor: ruby/default
+    steps:
+      - attach_workspace:
+          at: vendor
+      - run:
+          name: Install Code Climate Test Reporter
+          command: |
+            curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+            chmod +x ./cc-test-reporter
+      - run:
+          command: |
+            ./cc-test-reporter sum-coverage --output - codeclimate.*.json | ./cc-test-reporter upload-coverage --debug --input -
 
 
 workflows:
@@ -80,3 +120,6 @@ workflows:
       - test:
           requires:
             - build
+      - upload-coverage:
+          require:
+            - test
