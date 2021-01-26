@@ -50,6 +50,7 @@ jobs:
           paths:
             - ~/.cache/yarn
 
+      # Persist built dependencies to workspace
       - persist_to_workspace:
           root: vendor
           paths: 
@@ -99,7 +100,7 @@ jobs:
           name: Set up database
           command: bundle exec rake db:setup
 
-      # Run tests & extract results
+      # Run tests & coverage
       - run:
           name: Run tests
           command: |
@@ -110,6 +111,8 @@ jobs:
           name: Code Climate Test Coverage
           command: |
             ./cc-test-reporter format-coverage -t simplecov -o "coverage/codeclimate.$CIRCLE_NODE_INDEX.json"
+
+      # Extract test results
       - persist_to_workspace:
           root: coverage
           paths:
@@ -129,13 +132,18 @@ jobs:
     
     executor: ruby/default
     steps:
+      # Use extracted code coverage
       - attach_workspace:
           at: coverage
+
+      # Install Code Climate Test Reporter
       - run:
           name: Install Code Climate Test Reporter
           command: |
             curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
             chmod +x ./cc-test-reporter
+
+      # Upload coverage results
       - run:
           name: Upload coverage results
           command: |
