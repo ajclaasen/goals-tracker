@@ -3,16 +3,53 @@ orbs:
   ruby: circleci/ruby@0.1.2 
 
 jobs:
-  test:
+  build:
     docker:
       - image: cimg/ruby:3.0.0-node
+        environment:
+          RAILS_ENV: test
+      - image: circleci/postgres:latest
     executor: ruby/default
     steps:
       - checkout
-      - run: bundle check --path=vendor/bundle || bundle install --path=vendor/bundle --jobs=4 --retry=3
+
+      # Restore cached dependencies
+      - type: cache-restore
+        name: Restore bundle cache
+        key: goal-tracker-{{ checksum "Gemfile.lock" }}
+
+      # Install bundle dependencies
+      - run: bundle install --path vendor/bundle
+
+      # Cache dependencies
+      - type: cache-save
+        name: Store bundle cache
+        key: goal-tracker-{{ checksum "Gemfile.lock" }}
+        paths:
+          - vendor/bundle
+        
+      - run: bundle exec rake db:setup
+
+
+  test:
+    docker:
+      - image: cimg/ruby:3.0.0-node
+        environment:
+          RAILS_ENV: test
+      - image: circleci/postgres:latest
+    executor: ruby/default
+    steps:
       - run: mkdir ~/rspec
       - run:
           command: bundle exec rspec --format progress --format RspecJunitFormatter -o ~/rspec/rspec.xml
           when: always
       - store_test_results:
           path: ~/rspec
+
+workflows:
+  build_and_test:
+    jobs:
+      - build
+      - test:
+          requires:
+            - build
