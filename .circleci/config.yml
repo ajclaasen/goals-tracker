@@ -25,8 +25,7 @@ jobs:
       - type: cache-save
         name: Store bundle cache
         key: goal-tracker-{{ checksum "Gemfile.lock" }}
-        paths:
-          - vendor/bundle
+        path: vendor/bundle
         
       - run: bundle exec rake db:setup
 
