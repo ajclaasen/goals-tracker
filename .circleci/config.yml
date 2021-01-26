@@ -19,11 +19,11 @@ jobs:
       - restore_cache:
           name: Restore bundle cache
           keys: 
-            - goal-tracker-{{ checksum "Gemfile.lock" }}
+            - goal-tracker-bundle-{{ checksum "Gemfile.lock" }}
       - restore_cache:
           name: Restore yarn cache
           keys:
-            - goal-tracker-{{ checksum "yarn.lock" }}
+            - goal-tracker-yarn-{{ checksum "yarn.lock" }}
 
       # Install bundle dependencies
       - run: bundle config set --local path 'vendor/bundle'
@@ -37,12 +37,12 @@ jobs:
       # Cache dependencies
       - save_cache:
           name: Store bundle cache
-          key: goal-tracker-{{ checksum "Gemfile.lock" }}
+          key: goal-tracker-bundle-{{ checksum "Gemfile.lock" }}
           paths: 
             - vendor/bundle
       - save_cache:
           name: Store yarn cache
-          key: goal-tracker-{{ checksum "yarn.lock" }}
+          key: goal-tracker-yarn-{{ checksum "yarn.lock" }}
           paths:
             - ~/.cache/yarn
 
