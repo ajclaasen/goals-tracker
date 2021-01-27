@@ -20,11 +20,11 @@ jobs:
       - restore_cache:
           name: Restore bundle cache
           keys: 
-            - goal-tracker-bundle-{{ checksum "Gemfile.lock" }}
+            - goals-tracker-bundle-{{ checksum "Gemfile.lock" }}
       - restore_cache:
           name: Restore yarn cache
           keys:
-            - goal-tracker-yarn-{{ checksum "yarn.lock" }}
+            - goals-tracker-yarn-{{ checksum "yarn.lock" }}
 
       # Install bundle dependencies
       - run: 
@@ -41,12 +41,12 @@ jobs:
       # Cache dependencies
       - save_cache:
           name: Store bundle cache
-          key: goal-tracker-bundle-{{ checksum "Gemfile.lock" }}
+          key: goals-tracker-bundle-{{ checksum "Gemfile.lock" }}
           paths: 
             - vendor/bundle
       - save_cache:
           name: Store yarn cache
-          key: goal-tracker-yarn-{{ checksum "yarn.lock" }}
+          key: goals-tracker-yarn-{{ checksum "yarn.lock" }}
           paths:
             - ~/.cache/yarn
 
@@ -71,7 +71,7 @@ jobs:
       - image: circleci/postgres:latest
         environment:
           POSTGRES_USER: root
-          POSTGRES_DB: goal-tracker-test
+          POSTGRES_DB: goals-tracker-test
           POSTGRES_PASSWORD: $POSTGRES_PASSWORD
 
     executor: ruby/default
