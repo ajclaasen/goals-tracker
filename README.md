@@ -2,27 +2,48 @@
 [![Maintainability](https://api.codeclimate.com/v1/badges/28d7062f1b1c9a7fefe7/maintainability)](https://codeclimate.com/github/rjclaasen/goals-tracker/maintainability)
 [![Test Coverage](https://api.codeclimate.com/v1/badges/28d7062f1b1c9a7fefe7/test_coverage)](https://codeclimate.com/github/rjclaasen/goals-tracker/test_coverage)
 
-# README
+# Goals Tracker
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+Simple session-based goal tracker for TTRPG campaigns. 
 
-Things you may want to cover:
+## Dependencies
 
-* Ruby version
+- Ruby 3.0.0
+- Postgresql
+- Node.js with Yarn
 
-* System dependencies
+## Configuration
 
-* Configuration
+### Database
+The default username for postgres is the username of your OS user. The default password is no password.
 
-* Database creation
+If the postgres configuration on your machine is different, see `config/database.yml`.
 
-* Database initialization
+For the production environment, the username is `goals_tracker` and the password is fetched from the `GOALS_TRACKER_DATABASE_PASSWORD` environment variable.
 
-* How to run the test suite
+## Database creation
 
-* Services (job queues, cache servers, search engines, etc.)
+Run the following to create the development and test databases and perform the migrations. The databases are ready for use afterwards.
 
-* Deployment instructions
+```
+$ rails db:create
+$ rails db:migrate
+```
 
-* ...
+## How to run the test suite
+
+```
+$ rspec
+```
+
+Code coverage output can be found at `coverage/index.html`.
+
+## Deployment instructions
+
+```
+$ rails s
+```
+
+will run the server locally at [`localhost:3000`](localhost:3000).
+
+Visit the list of all goals at [`localhost:3000/goals`](localhost:3000/goals).
