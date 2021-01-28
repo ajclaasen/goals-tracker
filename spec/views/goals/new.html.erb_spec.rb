@@ -2,10 +2,7 @@ require 'rails_helper'
 
 RSpec.describe "goals/new", type: :view do
   before(:each) do
-    assign(:goal, Goal.new(
-      text: "MyString",
-      reward: ""
-    ))
+    assign(:goal, build(:goal))
   end
 
   it "renders new goal form" do

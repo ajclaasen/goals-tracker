@@ -2,10 +2,7 @@ require 'rails_helper'
 
 RSpec.describe "goals/edit", type: :view do
   before(:each) do
-    @goal = assign(:goal, Goal.create!(
-      text: "MyString",
-      reward: ""
-    ))
+    @goal = create(:goal)
   end
 
   it "renders the edit goal form" do
