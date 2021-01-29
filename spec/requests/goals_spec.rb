@@ -18,7 +18,12 @@ RSpec.describe "/goals", type: :request do
   # Goal. As you add validations to Goal, be sure to
   # adjust the attributes here as well.
   let(:valid_attributes) { attributes_for(:goal) }
-  let(:invalid_attributes) { attributes_for(:goal).without(:text) }
+
+  let(:invalid_attributes) { 
+    attributes = attributes_for(:goal)
+    attributes[:text] = ""
+    attributes
+  }
 
   describe "GET /index" do
     it "renders a successful response" do
@@ -99,11 +104,7 @@ RSpec.describe "/goals", type: :request do
     end
 
     context "with invalid parameters" do
-      # There are currently no ways to send invalid parameters in a PATCH request.
-      # - Extra disallowed parameters get filtered out while the rest is accepted.
-      # - Sending different types (i.e. reward = string) will be type converted internally and accepted.
       it "renders a successful response (i.e. to display the 'edit' template)" do
-        skip("Add invalid parameters for PATCH requests.")
         goal = character.goals.create! valid_attributes
         patch character_goal_url(character, goal), params: { goal: invalid_attributes }
         expect(response).to be_successful
