@@ -2,13 +2,11 @@ class GoalsController < ApplicationController
   before_action :set_character
   before_action :set_goal, only: [:show, :edit, :update, :destroy]
 
-  # GET /goals
   # GET /goals.json
   def index
     @goals = Goal.all
   end
 
-  # GET /goals/1
   # GET /goals/1.json
   def show
   end

@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe "goals/index", type: :view do
+RSpec.describe "goals/index.json", type: :view do
   before(:each) do
     @character = create(:character)
     assign(:goals, [
@@ -11,7 +11,7 @@ RSpec.describe "goals/index", type: :view do
 
   it "renders a list of goals" do
     render
-    assert_select "tr>td", text: "Beat the bad guys.".to_s, count: 2
-    assert_select "tr>td", text: "100".to_s, count: 2
+    expect(response.body).to include("Beat the bad guys.").twice
+    expect(response.body).to include("100").twice
   end
 end
