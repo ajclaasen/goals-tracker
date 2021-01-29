@@ -15,9 +15,7 @@
 RSpec.describe "/characters", type: :request do
   # Character. As you add validations to Character, be sure to
   # adjust the attributes here as well.
-  let(:valid_attributes) {
-    skip("Add a hash of attributes valid for your model")
-  }
+  let(:valid_attributes) { attributes_for(:character) }
 
   let(:invalid_attributes) {
     skip("Add a hash of attributes invalid for your model")
@@ -84,15 +82,13 @@ RSpec.describe "/characters", type: :request do
 
   describe "PATCH /update" do
     context "with valid parameters" do
-      let(:new_attributes) {
-        skip("Add a hash of attributes valid for your model")
-      }
+      let(:new_attributes) { { name: "Aurelius" } }
 
       it "updates the requested character" do
         character = Character.create! valid_attributes
         patch character_url(character), params: { character: new_attributes }
         character.reload
-        skip("Add assertions for updated state")
+        expect(character.name).to eq "Aurelius"
       end
 
       it "redirects to the character" do

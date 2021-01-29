@@ -17,13 +17,8 @@ RSpec.describe "/goals", type: :request do
 
   # Goal. As you add validations to Goal, be sure to
   # adjust the attributes here as well.
-  let(:valid_attributes) {
-    attributes_for(:goal)
-  }
-
-  let(:invalid_attributes) {
-    attributes_for(:goal).without(:text)
-  }
+  let(:valid_attributes) { attributes_for(:goal) }
+  let(:invalid_attributes) { attributes_for(:goal).without(:text) }
 
   describe "GET /index" do
     it "renders a successful response" do
