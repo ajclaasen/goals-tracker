@@ -18,7 +18,9 @@ RSpec.describe "/characters", type: :request do
   let(:valid_attributes) { attributes_for(:character) }
 
   let(:invalid_attributes) {
-    skip("Add a hash of attributes invalid for your model")
+    attributes = attributes_for(:character)
+    attributes[:name] = ""
+    attributes
   }
 
   describe "GET /index" do
