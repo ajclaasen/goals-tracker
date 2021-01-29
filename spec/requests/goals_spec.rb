@@ -25,18 +25,18 @@ RSpec.describe "/goals", type: :request do
     attributes
   }
 
-  describe "GET /index" do
+  describe "GET /index.json" do
     it "renders a successful response" do
       character.goals.create! valid_attributes
-      get character_goals_url(character)
+      get character_goals_url(character), headers: { "ACCEPT" => "application/json" }
       expect(response).to be_successful
     end
   end
 
-  describe "GET /show" do
+  describe "GET /show.json" do
     it "renders a successful response" do
       goal = character.goals.create! valid_attributes
-      get character_goal_url(character, goal)
+      get character_goal_url(character, goal), headers: { "ACCEPT" => "application/json" }
       expect(response).to be_successful
     end
   end

@@ -1,6 +1,7 @@
 Rails.application.routes.draw do
   resources :characters do
-    resources :goals
+    resources :goals, except: [:index, :show]
+    resources :goals, only: [:index, :show], constraints: -> request { request.format == :json }
   end
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
 end
