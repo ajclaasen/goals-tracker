@@ -16,9 +16,9 @@
       <tr>
         <td><%= goal.text %></td>
         <td><%= goal.reward %></td>
-        <td><%= link_to 'Show', goal %></td>
-        <td><%= link_to 'Edit', edit_goal_path(goal) %></td>
-        <td><%= link_to 'Destroy', goal, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <td><%= link_to 'Show', [goal.character, goal] %></td>
+        <td><%= link_to 'Edit', edit_character_goal_path(goal.character, goal) %></td>
+        <td><%= link_to 'Destroy', [goal.character, goal], method: :delete, data: { confirm: 'Are you sure?' } %></td>
       </tr>
     <% end %>
   </tbody>
@@ -26,4 +26,4 @@
 
 <br>
 
-<%= link_to 'New Goal', new_goal_path %>
+<%= link_to 'New Goal', new_character_goal_path(@character) %>
