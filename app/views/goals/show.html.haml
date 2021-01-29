@@ -1,0 +1,10 @@
+%p#notice= notice
+%p
+  %strong Text:
+  = @goal.text
+%p
+  %strong Reward:
+  = @goal.reward
+= link_to 'Edit', edit_character_goal_path(@character, @goal)
+|
+= link_to 'Back', character_goals_path(@character)

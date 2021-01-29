@@ -1,0 +1,18 @@
+%p#notice= notice
+%h1 Goals
+%table
+  %thead
+    %tr
+      %th Text
+      %th Reward
+      %th{:colspan => "3"}
+  %tbody
+    - @goals.each do |goal|
+      %tr
+        %td= goal.text
+        %td= goal.reward
+        %td= link_to 'Show', [goal.character, goal]
+        %td= link_to 'Edit', edit_character_goal_path(goal.character, goal)
+        %td= link_to 'Destroy', [goal.character, goal], method: :delete, data: { confirm: 'Are you sure?' }
+%br/
+= link_to 'New Goal', new_character_goal_path(@character)
