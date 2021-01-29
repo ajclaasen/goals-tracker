@@ -1,6 +1,6 @@
 <h1>Editing Goal</h1>
 
-<%= render 'form', goal: @goal %>
+<%= render 'form', character: @character, goal: @goal %>
 
-<%= link_to 'Show', @goal %> |
-<%= link_to 'Back', goals_path %>
+<%= link_to 'Show', [@character, @goal] %> |
+<%= link_to 'Back', character_goals_path(@character) %>

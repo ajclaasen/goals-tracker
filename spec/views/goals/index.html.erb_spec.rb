@@ -2,9 +2,10 @@ require 'rails_helper'
 
 RSpec.describe "goals/index", type: :view do
   before(:each) do
+    @character = create(:character)
     assign(:goals, [
-      create(:goal),
-      create(:goal)
+      create(:goal, character: @character),
+      create(:goal, character: @character)
     ])
   end
 

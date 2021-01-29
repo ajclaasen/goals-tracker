@@ -1,4 +1,5 @@
 class GoalsController < ApplicationController
+  before_action :set_character
   before_action :set_goal, only: [:show, :edit, :update, :destroy]
 
   # GET /goals
@@ -24,11 +25,11 @@ class GoalsController < ApplicationController
   # POST /goals
   # POST /goals.json
   def create
-    @goal = Goal.new(goal_params)
+    @goal = @character.goals.build(goal_params)
 
     respond_to do |format|
       if @goal.save
-        format.html { redirect_to @goal, notice: 'Goal was successfully created.' }
+        format.html { redirect_to [@character, @goal], notice: 'Goal was successfully created.' }
         format.json { render :show, status: :created, location: @goal }
       else
         format.html { render :new }
@@ -42,7 +43,7 @@ class GoalsController < ApplicationController
   def update
     respond_to do |format|
       if @goal.update(goal_params)
-        format.html { redirect_to @goal, notice: 'Goal was successfully updated.' }
+        format.html { redirect_to [@character, @goal], notice: 'Goal was successfully updated.' }
         format.json { render :show, status: :ok, location: @goal }
       else
         format.html { render :edit }
@@ -56,13 +57,17 @@ class GoalsController < ApplicationController
   def destroy
     @goal.destroy
     respond_to do |format|
-      format.html { redirect_to goals_url, notice: 'Goal was successfully destroyed.' }
+      format.html { redirect_to character_goals_url(@character), notice: 'Goal was successfully destroyed.' }
       format.json { head :no_content }
     end
   end
 
   private
     # Use callbacks to share common setup or constraints between actions.
+    def set_character
+      @character = Character.find(params[:character_id])
+    end
+
     def set_goal
       @goal = Goal.find(params[:id])
     end

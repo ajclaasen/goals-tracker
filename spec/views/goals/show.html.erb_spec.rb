@@ -3,6 +3,7 @@ require 'rails_helper'
 RSpec.describe "goals/show", type: :view do
   before(:each) do
     @goal = create(:goal)
+    @character = @goal.character
   end
 
   it "renders attributes in <p>" do
