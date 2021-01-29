@@ -11,7 +11,7 @@ RSpec.describe "goals/index.json", type: :view do
 
   it "renders a list of goals" do
     render
-    expect(response.body).to include("Beat the bad guys.").twice
-    expect(response.body).to include("100").twice
+    expect(rendered).to include("Beat the bad guys.").twice
+    expect(rendered).to include("100").twice
   end
 end
